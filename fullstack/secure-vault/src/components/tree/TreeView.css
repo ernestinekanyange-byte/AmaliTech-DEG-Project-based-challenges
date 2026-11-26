@@ -1,0 +1,4 @@
+.tree-view {
+  min-height: 100%;
+  overflow: auto;
+}

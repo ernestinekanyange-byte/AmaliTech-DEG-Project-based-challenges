@@ -1,0 +1,105 @@
+.tree-node {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: var(--tree-row-height);
+  padding-right: var(--space-3);
+  border-left: 3px solid transparent;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  font-size: var(--text-base-size);
+  user-select: none;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.tree-item:hover > .tree-node {
+  background: var(--color-bg-elevated);
+}
+
+.tree-item--selected > .tree-node {
+  border-left-color: var(--color-accent-default);
+  background: var(--color-bg-selected);
+}
+
+.tree-item--selected .tree-node__name {
+  font-weight: 600;
+}
+
+.tree-item:focus-visible > .tree-node {
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: calc(-1 * var(--focus-ring-offset));
+  border-radius: var(--radius-sm);
+}
+
+.tree-node__chevron,
+.tree-node__icon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+}
+
+.tree-node__name {
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tree-node__name mark {
+  padding: 0 1px;
+  border-radius: 2px;
+  background: rgba(45, 212, 191, 0.1);
+  color: var(--color-text-primary);
+}
+
+.tree-node__size {
+  flex: none;
+  color: var(--color-text-secondary);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs-size);
+}
+
+.tree-node--folder .tree-node__name {
+  font-weight: 500;
+}
+
+.tree-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.tree-icon--chevron {
+  color: var(--color-text-secondary);
+  transition: transform var(--transition-fast);
+}
+
+.tree-icon--open {
+  transform: rotate(90deg);
+}
+
+.tree-icon--folder {
+  color: var(--color-text-secondary);
+  opacity: 0.7;
+}
+
+.tree-icon--folder-open {
+  color: var(--color-accent-default);
+}
+
+.tree-icon--file {
+  color: var(--color-text-secondary);
+}
+
+.tree-node__empty {
+  display: flex;
+  align-items: center;
+  height: var(--tree-row-height);
+  margin-left: 3px;
+  border-left: 1px dashed var(--color-border-subtle);
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm-size);
+  font-style: italic;
+}
