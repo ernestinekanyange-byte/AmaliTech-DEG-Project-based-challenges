@@ -32,7 +32,9 @@ export function TreeNode(props: TreeNodeProps) {
     props.onFocus(node.id);
     event.currentTarget.focus();
     if (isFolder) {
-      props.onToggle(node.id);
+      if (!query.trim()) {
+        props.onToggle(node.id);
+      }
     } else {
       props.onSelect(node.id);
     }

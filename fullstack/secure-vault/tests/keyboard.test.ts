@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { buildIndex } from "../src/lib/buildIndex";
-import { reduceKey } from "../src/lib/keyboard";
+import { reconcileFocus, reduceKey } from "../src/lib/keyboard";
 import type { VaultNode } from "../src/data/types";
 
 const tree: VaultNode[] = [
@@ -57,8 +57,34 @@ describe("reduceKey", () => {
     expect(reduceKey("ArrowLeft", context("a"))?.focusedId).toBe("f1");
   });
 
+  it("navigates through search-expanded folders without changing expansion state", () => {
+    const expandedIds = new Set<string>();
+    const searchContext = {
+      ...context("f1", expandedIds),
+      searchActive: true
+    };
+
+    expect(reduceKey("ArrowRight", searchContext)?.focusedId).toBe("a");
+    expect(reduceKey("ArrowLeft", { ...searchContext, focusedId: "a" })?.focusedId).toBe("f1");
+    expect(expandedIds.size).toBe(0);
+  });
+
   it("moves to the first and last visible rows", () => {
     expect(reduceKey("Home", context("r"))?.focusedId).toBe("f1");
     expect(reduceKey("End", context("f1"))?.focusedId).toBe("r");
+  });
+});
+
+describe("reconcileFocus", () => {
+  it("keeps the focused item while it remains visible", () => {
+    expect(reconcileFocus(["a", "b"], "b")).toBe("b");
+  });
+
+  it("moves focus to the first result when the current item is hidden", () => {
+    expect(reconcileFocus(["a", "b"], "hidden")).toBe("a");
+  });
+
+  it("clears focus when no rows are visible", () => {
+    expect(reconcileFocus([], "hidden")).toBeNull();
   });
 });

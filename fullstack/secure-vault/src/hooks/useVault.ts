@@ -1,8 +1,9 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import rawData from "../../data.json";
 import type { VaultNode } from "../data/types";
 import { buildIndex } from "../lib/buildIndex";
 import { deriveVisible } from "../lib/deriveVisible";
+import { reconcileFocus } from "../lib/keyboard";
 
 const roots = rawData as VaultNode[];
 
@@ -19,6 +20,11 @@ export function useVault() {
     () => deriveVisible(roots, expandedIds, query),
     [expandedIds, query]
   );
+  const visibleFocusedId = reconcileFocus(visibleIds, focusedId);
+
+  useEffect(() => {
+    setFocusedId((current) => reconcileFocus(visibleIds, current));
+  }, [visibleIds]);
 
   const toggle = useCallback((id: string) => {
     setExpandedIds((current) => {
@@ -39,7 +45,7 @@ export function useVault() {
     index,
     expandedIds,
     selectedId,
-    focusedId,
+    focusedId: visibleFocusedId,
     query,
     visibleIds,
     setExpandedIds,

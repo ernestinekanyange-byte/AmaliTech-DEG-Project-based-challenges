@@ -5,11 +5,16 @@ export interface KeyContext {
   focusedId: string | null;
   expandedIds: Set<string>;
   index: VaultIndex;
+  searchActive?: boolean;
 }
 
 export interface KeyResult {
   focusedId?: string | null;
   expandedIds?: Set<string>;
+}
+
+export function reconcileFocus(visibleIds: string[], focusedId: string | null): string | null {
+  return focusedId && visibleIds.includes(focusedId) ? focusedId : visibleIds[0] ?? null;
 }
 
 export function reduceKey(key: string, context: KeyContext): KeyResult | null {
@@ -40,6 +45,12 @@ export function reduceKey(key: string, context: KeyContext): KeyResult | null {
       if (!node || node.type !== "folder") {
         return null;
       }
+      if (context.searchActive) {
+        const firstVisibleChild = (node.children ?? []).find((child) =>
+          visibleIds.includes(child.id)
+        );
+        return firstVisibleChild ? { focusedId: firstVisibleChild.id } : null;
+      }
       if (!expandedIds.has(focusedId)) {
         const nextExpanded = new Set(expandedIds);
         nextExpanded.add(focusedId);
@@ -53,6 +64,10 @@ export function reduceKey(key: string, context: KeyContext): KeyResult | null {
     case "ArrowLeft": {
       if (!focusedId) {
         return null;
+      }
+      if (context.searchActive) {
+        const parent = index.parentOf.get(focusedId) ?? null;
+        return parent && visibleIds.includes(parent) ? { focusedId: parent } : null;
       }
       const node = index.byId.get(focusedId);
       if (node?.type === "folder" && expandedIds.has(focusedId)) {

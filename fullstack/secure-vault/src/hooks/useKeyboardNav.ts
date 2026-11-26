@@ -46,7 +46,8 @@ export function useKeyboardNav(params: Params) {
         visibleIds: params.visibleIds,
         focusedId: params.focusedId,
         expandedIds: params.expandedIds,
-        index: params.index
+        index: params.index,
+        searchActive: Boolean(params.query.trim())
       });
 
       if (!result) {
