@@ -1,7 +1,10 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { Header } from "./components/layout/Header";
+import { VaultHealthStrip } from "./components/layout/VaultHealthStrip";
+import { PropertiesPanel } from "./components/properties/PropertiesPanel";
 import { TreeView } from "./components/tree/TreeView";
 import { SearchInput } from "./components/primitives/SearchInput";
+import type { VaultNode } from "./data/types";
 import { useKeyboardNav } from "./hooks/useKeyboardNav";
 import { useVault } from "./hooks/useVault";
 import "./App.css";
@@ -27,6 +30,22 @@ export default function App() {
     [setExpandedIds]
   );
   const selected = selectedId ? index.byId.get(selectedId) ?? null : null;
+  const path = useMemo<VaultNode[]>(() => {
+    if (!selectedId) {
+      return [];
+    }
+
+    const nodes: VaultNode[] = [];
+    let currentId: string | null = selectedId;
+    while (currentId) {
+      const node = index.byId.get(currentId);
+      if (node) {
+        nodes.unshift(node);
+      }
+      currentId = index.parentOf.get(currentId) ?? null;
+    }
+    return nodes;
+  }, [selectedId, index]);
 
   useKeyboardNav({
     visibleIds,
@@ -80,10 +99,9 @@ export default function App() {
             )}
           </div>
         </main>
-        <aside className="properties-placeholder" aria-label="Properties">
-          {selected ? selected.name : "Select an item to inspect its properties."}
-        </aside>
+        <PropertiesPanel selected={selected} path={path} />
       </div>
+      <VaultHealthStrip roots={vault.roots} />
       <div className="sr-only" role="status" aria-live="polite">
         {announce}
       </div>

@@ -16,7 +16,7 @@
   flex: 1 1 auto;
   flex-direction: column;
   gap: var(--space-4);
-  min-width: 0;
+  min-width: 360px;
   min-height: 0;
   padding: var(--space-6);
 }
@@ -72,18 +72,6 @@
   text-decoration: underline;
 }
 
-.properties-placeholder {
-  display: flex;
-  flex: 0 0 320px;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-6);
-  border-left: 1px solid var(--color-border-subtle);
-  background: var(--color-bg-surface);
-  color: var(--color-text-secondary);
-  text-align: center;
-}
-
 .sr-only {
   position: absolute;
   width: 1px;
@@ -102,13 +90,8 @@
   }
 
   .tree-pane {
+    min-width: 0;
+    min-height: 50vh;
     padding: var(--space-4);
-  }
-
-  .properties-placeholder {
-    flex-basis: auto;
-    min-height: 120px;
-    border-top: 1px solid var(--color-border-subtle);
-    border-left: 0;
   }
 }
