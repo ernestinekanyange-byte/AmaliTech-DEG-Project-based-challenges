@@ -1,0 +1,58 @@
+name: Deploy SecureVault
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/deploy-secure-vault.yml"
+      - "fullstack/secure-vault/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: secure-vault-pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: fullstack/secure-vault/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+        working-directory: fullstack/secure-vault
+      - name: Build and test
+        run: |
+          npm test
+          npm run build
+        working-directory: fullstack/secure-vault
+        env:
+          VITE_BASE_PATH: /AmaliTech-DEG-Project-based-challenges/
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: fullstack/secure-vault/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

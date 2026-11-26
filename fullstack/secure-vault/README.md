@@ -2,6 +2,8 @@
 
 A dark-mode file explorer for enterprise cloud-security vaults, built with React, TypeScript, Vite, and vanilla CSS.
 
+[Open the live SecureVault demo](https://ernestinekanyange-byte.github.io/AmaliTech-DEG-Project-based-challenges/)
+
 ## Features
 
 - Recursive folder tree supporting arbitrary nesting.
