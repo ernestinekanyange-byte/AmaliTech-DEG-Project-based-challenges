@@ -1,0 +1,46 @@
+.app {
+  min-height: 100%;
+}
+
+.app__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 56px;
+  padding: 0 var(--space-4);
+  background: var(--color-bg-surface);
+  border-bottom: 1px solid var(--color-border-subtle);
+  font-size: var(--text-md-size);
+  font-weight: 600;
+}
+
+.app__brand-mark {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: 1px solid var(--color-accent-default);
+  border-radius: var(--radius-sm);
+  color: var(--color-accent-default);
+}
+
+.app__status {
+  margin-left: auto;
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm-size);
+  font-weight: 400;
+}
+
+.app__content {
+  padding: var(--space-6);
+}
+
+.app__content h1 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-xl-size);
+}
+
+.app__content p {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
